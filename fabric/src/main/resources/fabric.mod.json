@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "xyper_flight",
+  "version": "${version}",
+
+  "name": "Flight Mod (Xyper Edition)",
+  "description": "Just some random flight mod I got commissioned.",
+  "authors": [],
+  "contact": {},
+
+  "license": "All Rights Reserved",
+  "icon": "icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.xypercode.mods.flight.fabric.FlightModFabric"
+    ]
+  },
+  "mixins": [
+    "xyper_flight.mixins.json",
+    "xyper_flight-common.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.3",
+    "minecraft": ">=1.19.2"
+  }
+}

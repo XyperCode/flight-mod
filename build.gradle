@@ -1,0 +1,89 @@
+plugins {
+    id "architectury-plugin" version "3.4-SNAPSHOT"
+    id "dev.architectury.loom" version "1.1-SNAPSHOT" apply false
+    id "io.github.pacifistmc.forgix" version "1.2.6"
+
+    // Shadow
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+architectury {
+    minecraft = rootProject.minecraft_version
+}
+
+forgix {
+    group = "io.github.xypercode"
+    // This is the common group of the mod which by default in Architectury Template it's defined as "maven_group" in your gradle.properties. If this property is not defined then by default it'll fetch the group from the maven_group property in your gradle.properties
+    mergedJarName = "flight-$mod_version-merged.jar"
+    // This is the name of the merged jar. If this property is not defined then by default it'll fetch the "archives_base_name" property with the "mod_version" property in your gradle.properties.
+    outputDir = "build/libs/merged"
+    // This is the output directory of the merged jar from the root project. If this property is not defined then by default it's set to "Merged".
+
+    forge {
+        projectName = "forge"
+        // This is the name of the forge project. If this property is not defined then by default it'll set to "forge" since that's the name the Architectury Template uses.
+        jarLocation = "build/libs/flight.jar"
+        // This is the location of the forge jar from the forge project. If this property is not defined then by default it fetches the jar with the shortest name.
+
+//        additionalRelocate "io.github.xypercode.mods" "forge.io.github.xypercode.mods"
+        // This is an important one to know. This is how you can remap additional packages such as libraries and stuff.
+//        additionalRelocate "io.github.xypercode.mods.flight" "forge.io.github.xypercode.mods.flight"
+
+        mixin "xyper_flight.mixins.json" // This is in case if we didn't auto detect the forge mixins.
+        mixin "xyper_flight-common.mixins.another.json"
+    }
+
+    fabric {
+        projectName = "fabric"
+        // This is the name of the fabric project. If this property is not defined then by default it'll set to "fabric" since that's the name the Architectury Template uses.
+        jarLocation = "build/libs/flight.jar"
+        // This is the location of the fabric jar from the fabric project. If this property is not defined then by default it fetches the jar with the shortest name.
+
+//        additionalRelocate "io.github.xypercode.mods" "fabric.io.github.xypercode.mods"
+        // This is an important one to know. This is how you can remap additional packages such as libraries and stuff.
+//        additionalRelocate "io.github.xypercode.mods.flight" "fabric.io.github.xypercode.mods.flight"
+    }
+}
+
+subprojects {
+    apply plugin: "dev.architectury.loom"
+
+    loom {
+        silentMojangMappingsLicense()
+    }
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        // The following line declares the mojmap mappings, you may use other mappings as well
+        mappings loom.officialMojangMappings()
+        // The following line declares the yarn mappings you may select this one as well.
+        // mappings "net.fabricmc:yarn:@YARN_MAPPINGS@:v2"
+    }
+}
+
+allprojects {
+    apply plugin: "java"
+    apply plugin: "architectury-plugin"
+    apply plugin: "maven-publish"
+
+    archivesBaseName = rootProject.archives_base_name
+    version = rootProject.mod_version
+    group = rootProject.maven_group
+
+    repositories {
+        // Add repositories to retrieve artifacts from in here.
+        // You should only use this when depending on other mods because
+        // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+        // See https://docs.gradle.org/current/userguide/declaring_repositories.html
+        // for more information about repositories.
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+        options.release.set(17)
+    }
+
+    java {
+        withSourcesJar()
+    }
+}
