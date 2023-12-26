@@ -1,4 +1,4 @@
-# Flight Mod by @XyperCode
+# Flight Mod by XyperCode
 
 Just a random flight mod, Allows for flight in survival!.
 Anyways this mod was a commission by someone on Discord.
