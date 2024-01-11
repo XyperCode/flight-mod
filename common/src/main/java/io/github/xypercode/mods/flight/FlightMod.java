@@ -16,18 +16,16 @@ public class FlightMod {
 	public static final String MOD_ID = "xyper_flight";
 
     public static void init() {
-
+        // Architectury initialization
     }
 
     public static void postInit() {
         NetworkManager.registerReceiver(NetworkManager.Side.C2S, id("flight"), (buf, context) -> {
-            boolean flight = buf.readBoolean();
             Player player = context.getPlayer();
             if (player != null) {
-                player.getAbilities().flying = !player.getAbilities().mayfly;
-                player.getAbilities().mayfly = !player.getAbilities().mayfly;
-                boolean mayfly = player.getAbilities().mayfly;
-                System.out.println("mayfly = " + mayfly);
+                boolean doFly = buf.readBoolean();
+                player.getAbilities().flying = doFly;
+                player.getAbilities().mayfly = doFly;
                 player.onUpdateAbilities();
             }
         });
@@ -43,7 +41,6 @@ public class FlightMod {
             wasJumpDown = true;
 
             if (lastJumpTime + 500 > System.currentTimeMillis()) {
-                System.out.println("Hello");
                 jumpCount++;
             } else {
                 jumpCount = 1;
@@ -53,10 +50,12 @@ public class FlightMod {
 
             if (jumpCount >= 2) {
                 jumpCount = 0;
-                FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(new UnpooledDirectByteBuf(ByteBufAllocator.DEFAULT.buffer().alloc(), 1, 65536));
-                friendlyByteBuf.writeBoolean(!playerMixin.getAbilities().mayfly);
+                if (!minecraft.player.getAbilities().mayfly) {
+                    FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(new UnpooledDirectByteBuf(ByteBufAllocator.DEFAULT.buffer().alloc(), 1, 65536));
+                    friendlyByteBuf.writeBoolean(true);
 
-                NetworkManager.sendToServer(FlightMod.id("flight"), friendlyByteBuf);
+                    NetworkManager.sendToServer(FlightMod.id("flight"), friendlyByteBuf);
+                }
             }
         } else if (!minecraft.options.keyJump.isDown()) {
             wasJumpDown = false;
