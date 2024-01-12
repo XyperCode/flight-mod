@@ -22,7 +22,7 @@ forgix {
     forge {
         projectName = "forge"
         // This is the name of the forge project. If this property is not defined then by default it'll set to "forge" since that's the name the Architectury Template uses.
-        jarLocation = "build/libs/flight.jar"
+        jarLocation = "build/libs/flight-${mod_version}.jar"
         // This is the location of the forge jar from the forge project. If this property is not defined then by default it fetches the jar with the shortest name.
 
 //        additionalRelocate "io.github.xypercode.mods" "forge.io.github.xypercode.mods"
@@ -30,13 +30,13 @@ forgix {
 //        additionalRelocate "io.github.xypercode.mods.flight" "forge.io.github.xypercode.mods.flight"
 
         mixin "xyper_flight.mixins.json" // This is in case if we didn't auto detect the forge mixins.
-        mixin "xyper_flight-common.mixins.another.json"
+        mixin "xyper_flight-common.mixins.json"
     }
 
     fabric {
         projectName = "fabric"
         // This is the name of the fabric project. If this property is not defined then by default it'll set to "fabric" since that's the name the Architectury Template uses.
-        jarLocation = "build/libs/flight.jar"
+        jarLocation = "build/libs/flight-${mod_version}.jar"
         // This is the location of the fabric jar from the fabric project. If this property is not defined then by default it fetches the jar with the shortest name.
 
 //        additionalRelocate "io.github.xypercode.mods" "fabric.io.github.xypercode.mods"
